@@ -1,0 +1,32 @@
+name: Build APK
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Dependencies
+        run: |
+          pip install kivy
+          pip install buildozer
+
+      - name: Set up Buildozer
+        run: buildozer android debug
+
+      - name: Build APK
+        run: buildozer -v android debug
+
+      - name: Publish APK
+        uses: actions/upload-artifact@v2
+        with:
+          name: app
+          path: ./bin
+
